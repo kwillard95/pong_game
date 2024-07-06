@@ -1,5 +1,6 @@
 import turtle as t
-from constants import HEADING_VALUES, NUM_OF_STEPS
+from constants import HEADING_VALUES, NUM_OF_STEPS, COMPUTER_PACE
+
 
 class Paddle(t.Turtle):
     def __init__(self, screen, screen_width, screen_height, is_computer):
@@ -21,21 +22,46 @@ class Paddle(t.Turtle):
         self.shape("square")
         self.shapesize(1, 3)
 
-    def move_computer_paddle(self):
-        pass
+    def move(self):
+        if self.is_computer:
+            self.forward(COMPUTER_PACE)
+        else:
+            self.forward(NUM_OF_STEPS)
 
-    def move_down(self):
+    def face_down(self):
         self.setheading(HEADING_VALUES['down'])
-        self.forward(NUM_OF_STEPS)
+        if not self.is_computer:
+            self.forward(NUM_OF_STEPS)
 
-    def move_up(self):
+    def face_up(self):
         self.setheading(HEADING_VALUES['up'])
-        self.forward(NUM_OF_STEPS)
+        if not self.is_computer:
+            self.forward(NUM_OF_STEPS)
+
+    def is_at_edge(self):
+        if self.distance(self.screen_width, self.screen_height) < 10 or self.distance(self.screen_width, self.screen_height * -1) < 10:
+            return True
+        else:
+            return False
+
+    def redirect_paddle(self):
+        if self.heading() == HEADING_VALUES['up']:
+            self.face_down()
+        elif self.heading() == HEADING_VALUES['down']:
+            self.face_up()
+
+    def move_computer_paddle(self):
+        while not self.is_at_edge():
+            self.move()
+            if self.is_at_edge():
+                self.redirect_paddle()
+                self.move()
+
 
     def move_user_paddle(self):
         self.screen.listen()
-        self.screen.onkeypress(self.move_down, 'Down')
-        self.screen.onkeypress(self.move_up, 'Up')
+        self.screen.onkeypress(self.face_down, 'Down')
+        self.screen.onkeypress(self.face_up, 'Up')
 
     def move_paddle(self):
         if self.is_computer:
