@@ -12,10 +12,19 @@ screen_width = (screen.window_width() / 2) - WINDOW_PADDING
 def set_up_game():
     user = Paddle(screen, screen_width, screen_height, False)
     computer = Paddle(screen, screen_width, screen_height, True)
-    ball = Ball(screen_height)
-
+    ball = Ball(screen_width, screen_height)
     user.move_paddle()
-    computer.move_paddle()
+    while True:
+        ball.is_wall_collision()
+        ball.detect_paddle_collision(user, computer)
+        ball.move_ball()
+
+
+    # computer.move_paddle()
+
+
+
+
 
 
 
