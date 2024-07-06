@@ -1,6 +1,7 @@
 import turtle as t
 from constants import WINDOW_PADDING
 from paddle import Paddle
+from ball import Ball
 
 screen = t.Screen()
 screen.bgcolor("black")
@@ -11,9 +12,11 @@ screen_width = (screen.window_width() / 2) - WINDOW_PADDING
 def set_up_game():
     user = Paddle(screen, screen_width, screen_height, False)
     computer = Paddle(screen, screen_width, screen_height, True)
+    ball = Ball(screen_height)
 
     user.move_paddle()
     computer.move_paddle()
+
 
 
 set_up_game()

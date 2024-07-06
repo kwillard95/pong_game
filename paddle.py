@@ -39,7 +39,8 @@ class Paddle(t.Turtle):
             self.forward(NUM_OF_STEPS)
 
     def is_at_edge(self):
-        if self.distance(self.screen_width, self.screen_height) < 10 or self.distance(self.screen_width, self.screen_height * -1) < 10:
+        if (self.distance(self.screen_width, self.screen_height) < 10 or
+                self.distance(self.screen_width, self.screen_height * -1) < 10):
             return True
         else:
             return False
