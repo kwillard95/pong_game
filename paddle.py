@@ -52,11 +52,9 @@ class Paddle(t.Turtle):
             self.face_up()
 
     def move_computer_paddle(self):
-        while not self.is_at_edge():
-            self.move()
-            if self.is_at_edge():
-                self.redirect_paddle()
-                self.move()
+        if self.is_at_edge():
+            self.redirect_paddle()
+        self.move()
 
 
     def move_user_paddle(self):
@@ -64,8 +62,4 @@ class Paddle(t.Turtle):
         self.screen.onkeypress(self.face_down, 'Down')
         self.screen.onkeypress(self.face_up, 'Up')
 
-    def move_paddle(self):
-        if self.is_computer:
-            self.move_computer_paddle()
-        else:
-            self.move_user_paddle()
+
