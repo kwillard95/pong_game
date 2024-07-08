@@ -22,24 +22,23 @@ class Paddle(t.Turtle):
         self.shape("square")
         self.shapesize(1, 3)
 
-    def face_down(self):
-        if self.is_computer and self.is_at_edge():
-            self.setheading(HEADING_VALUES['down'])
-        elif not self.is_computer:
-            if (not self.is_at_edge()) or (not self.is_computer and self.is_at_edge() and self.heading() == HEADING_VALUES['up']):
-                self.setheading(HEADING_VALUES['down'])
-                self.forward(NUM_OF_STEPS)
+    def create_redirect_paddle(self, direction):
+        def redirect_paddle():
+            nonlocal direction
+            if self.is_computer and self.is_at_edge():
+                self.setheading(HEADING_VALUES[direction])
+            elif not self.is_computer:
+                opposite_direction = ''
+                if direction == 'up':
+                    opposite_direction = 'down'
+                elif direction == 'down':
+                    opposite_direction = 'up'
 
-
-
-    def face_up(self):
-        if self.is_computer and self.is_at_edge():
-            self.setheading(HEADING_VALUES['up'])
-        elif not self.is_computer:
-            if (not self.is_at_edge()) or (not self.is_computer and self.is_at_edge() and self.heading() == HEADING_VALUES['down']):
-                self.setheading(HEADING_VALUES['up'])
-                self.forward(NUM_OF_STEPS)
-
+                if (not self.is_at_edge()) or (
+                        not self.is_computer and self.is_at_edge() and self.heading() == HEADING_VALUES[opposite_direction]):
+                    self.setheading(HEADING_VALUES[direction])
+                    self.forward(NUM_OF_STEPS)
+        return redirect_paddle
 
     def is_at_edge(self):
         if self.screen_height - abs(self.ycor()) <= 30:
@@ -49,19 +48,18 @@ class Paddle(t.Turtle):
 
     def redirect_paddle(self):
         if self.heading() == HEADING_VALUES['up']:
-            self.face_down()
+            self.create_redirect_paddle("down")()
         elif self.heading() == HEADING_VALUES['down']:
-            self.face_up()
+            self.create_redirect_paddle("up")()
 
     def move_computer_paddle(self):
         if self.is_at_edge():
             self.redirect_paddle()
         self.forward(COMPUTER_PACE)
 
-
     def move_user_paddle(self):
         self.screen.listen()
-        self.screen.onkeypress(self.face_down, 'Down')
-        self.screen.onkeypress(self.face_up, 'Up')
+        self.screen.onkeypress(self.create_redirect_paddle("down"), 'Down')
+        self.screen.onkeypress(self.create_redirect_paddle("up"), 'Up')
 
 

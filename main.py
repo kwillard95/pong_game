@@ -14,6 +14,7 @@ def set_up_game():
     computer = Paddle(screen, screen_width, screen_height, True)
     ball = Ball(screen_width, screen_height)
     user.move_user_paddle()
+
     def play_game():
         computer.move_computer_paddle()
         ball.is_wall_collision()
