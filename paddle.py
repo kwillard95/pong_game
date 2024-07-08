@@ -1,5 +1,5 @@
 import turtle as t
-from constants import HEADING_VALUES, NUM_OF_STEPS, COMPUTER_PACE
+from constants import HEADING_VALUES, NUM_OF_STEPS, COMPUTER_PACE, WINDOW_PADDING
 
 
 class Paddle(t.Turtle):
@@ -10,10 +10,10 @@ class Paddle(t.Turtle):
         self.screen_height = screen_height
         if is_computer:
             self.is_computer = True
-            self.setx(screen_width)
+            self.setx(screen_width - WINDOW_PADDING)
         else:
             self.is_computer = False
-            self.setx((screen_width + 10) * -1)
+            self.setx((screen_width - WINDOW_PADDING + 10) * -1)
 
         self.penup()
         self.speed("fastest")
@@ -22,25 +22,27 @@ class Paddle(t.Turtle):
         self.shape("square")
         self.shapesize(1, 3)
 
-    def move(self):
-        if self.is_computer:
-            self.forward(COMPUTER_PACE)
-        else:
-            self.forward(NUM_OF_STEPS)
-
     def face_down(self):
-        self.setheading(HEADING_VALUES['down'])
-        if not self.is_computer:
-            self.forward(NUM_OF_STEPS)
+        if self.is_computer and self.is_at_edge():
+            self.setheading(HEADING_VALUES['down'])
+        elif not self.is_computer:
+            if (not self.is_at_edge()) or (not self.is_computer and self.is_at_edge() and self.heading() == HEADING_VALUES['up']):
+                self.setheading(HEADING_VALUES['down'])
+                self.forward(NUM_OF_STEPS)
+
+
 
     def face_up(self):
-        self.setheading(HEADING_VALUES['up'])
-        if not self.is_computer:
-            self.forward(NUM_OF_STEPS)
+        if self.is_computer and self.is_at_edge():
+            self.setheading(HEADING_VALUES['up'])
+        elif not self.is_computer:
+            if (not self.is_at_edge()) or (not self.is_computer and self.is_at_edge() and self.heading() == HEADING_VALUES['down']):
+                self.setheading(HEADING_VALUES['up'])
+                self.forward(NUM_OF_STEPS)
+
 
     def is_at_edge(self):
-        if (self.distance(self.screen_width, self.screen_height) < 10 or
-                self.distance(self.screen_width, self.screen_height * -1) < 10):
+        if self.screen_height - abs(self.ycor()) <= 30:
             return True
         else:
             return False
@@ -54,7 +56,7 @@ class Paddle(t.Turtle):
     def move_computer_paddle(self):
         if self.is_at_edge():
             self.redirect_paddle()
-        self.move()
+        self.forward(COMPUTER_PACE)
 
 
     def move_user_paddle(self):
