@@ -1,4 +1,5 @@
 import turtle as t
+import random as r
 from constants import HEADING_VALUES, COLLISION_BUFFER
 
 
@@ -10,16 +11,32 @@ class Ball(t.Turtle):
         self.vertical_direction = "down"
         self.horizontal_direction = "left"
         self.color("green")
+        self.penup()
         self.shape("circle")
         self.shapesize(.5, .5)
-        self.setpos(0, 0)
+
+    def serve_ball(self, computers_serve):
+        y_cor_choices = [self.screen_height + 50, (self.screen_height + 50) * -1]
+        y_cor = y_cor_choices[r.randint(0, 1)]
+        if computers_serve:
+            x_cor = r.uniform(0, self.screen_width)
+            self.horizontal_direction = "left"
+        else:
+            x_cor = r.uniform(0, self.screen_width * -1)
+            self.horizontal_direction = "right"
+
+        if y_cor > 0:
+            self.vertical_direction = "down"
+        else:
+            self.vertical_direction = "up"
+
+        self.setpos(x_cor, y_cor)
 
     def redirect_ball_direction(self):
         if self.heading() == HEADING_VALUES["left"]:
             self.setheading(HEADING_VALUES["right"])
         elif self.heading() == HEADING_VALUES["right"]:
             self.setheading(HEADING_VALUES["left"])
-
 
     def move_ball(self):
         # Increase coordinates gradually
@@ -37,7 +54,12 @@ class Ball(t.Turtle):
 
         self.goto(x_position, y_position)
 
-    def is_wall_collision(self):
+    def is_ball_missing(self):
+        if self.screen_width - abs(self.xcor()) <= COLLISION_BUFFER:
+            return True
+        return False
+
+    def detect_wall_collision(self):
         # If the ball hits upper wall, redirect ball down in the same direction
         # If ball hits lower wall, redirect ball up in the same direction
         if self.screen_height - abs(self.ycor()) <= COLLISION_BUFFER:
@@ -48,22 +70,15 @@ class Ball(t.Turtle):
                 self.vertical_direction = "up"
                 return False
 
-
-
-
     def detect_paddle_collision(self, user, computer):
         # If the ball hits the paddle above (0,0), move ball up
         # If the ball hits the paddle below (0,0), move ball down
-        if self.distance(user) <= COLLISION_BUFFER:
+        if abs(self.xcor() - user.xcor()) < COLLISION_BUFFER and abs(self.ycor() - user.ycor()) < COLLISION_BUFFER + 20:
             self.horizontal_direction = "right"
             return True
-        if self.distance(computer) <= COLLISION_BUFFER:
+        if (abs(self.xcor() - computer.xcor()) < COLLISION_BUFFER and
+                abs(self.ycor() - computer.ycor()) < COLLISION_BUFFER + 20):
             self.horizontal_direction = "left"
             return True
         else:
             return False
-
-
-
-
-
