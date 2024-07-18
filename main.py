@@ -3,6 +3,7 @@ from constants import WINDOW_PADDING, HEADING_VALUES
 from paddle import Paddle
 from ball import Ball
 import time
+from scoreboard import Scoreboard
 
 
 screen = t.Screen()
@@ -27,9 +28,10 @@ def set_up_screen():
         pen.forward(20)
 
 
-
 def set_up_game():
     set_up_screen()
+    user_scoreboard = Scoreboard(screen_height, screen_width, True)
+    computer_scoreboard = Scoreboard(screen_height, screen_width, False)
     user = Paddle(screen, screen_width, screen_height, False)
     computer = Paddle(screen, screen_width, screen_height, True)
     ball = Ball(screen_width, screen_height)
@@ -39,6 +41,13 @@ def set_up_game():
         time.sleep(.05)
         computer.move_computer_paddle()
         if ball.is_ball_missing():
+            users_win = ball.is_users_win()
+            if users_win:
+                user_scoreboard.score += 1
+                user_scoreboard.write_score()
+            else:
+                computer_scoreboard.score += 1
+                computer_scoreboard.write_score()
             ball.serve_ball(True)
         else:
             ball.detect_wall_collision()
@@ -49,14 +58,6 @@ def set_up_game():
         screen.ontimer(play_game, 5)
 
     play_game()
-
-
-
-
-
-
-
-
 
 
 set_up_game()

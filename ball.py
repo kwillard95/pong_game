@@ -59,6 +59,9 @@ class Ball(t.Turtle):
             return True
         return False
 
+    def is_users_win(self):
+        return self.xcor() > 0
+
     def detect_wall_collision(self):
         # If the ball hits upper wall, redirect ball down in the same direction
         # If ball hits lower wall, redirect ball up in the same direction
