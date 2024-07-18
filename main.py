@@ -1,5 +1,5 @@
 import turtle as t
-from constants import WINDOW_PADDING, HEADING_VALUES
+from constants import HEADING_VALUES
 from paddle import Paddle
 from ball import Ball
 import time
@@ -45,10 +45,11 @@ def set_up_game():
             if users_win:
                 user_scoreboard.score += 1
                 user_scoreboard.write_score()
+                ball.serve_ball(users_serve=True)
             else:
                 computer_scoreboard.score += 1
                 computer_scoreboard.write_score()
-            ball.serve_ball(True)
+                ball.serve_ball(users_serve=False)
         else:
             ball.detect_wall_collision()
             if ball.detect_paddle_collision(user, computer):

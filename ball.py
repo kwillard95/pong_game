@@ -15,16 +15,15 @@ class Ball(t.Turtle):
         self.shape("circle")
         self.shapesize(.5, .5)
 
-    def serve_ball(self, computers_serve):
+    def serve_ball(self, users_serve):
         y_cor_choices = [self.screen_height + 50, (self.screen_height + 50) * -1]
         y_cor = y_cor_choices[r.randint(0, 1)]
-        if computers_serve:
-            x_cor = r.uniform(0, self.screen_width)
-            self.horizontal_direction = "left"
-        else:
+        if users_serve:
             x_cor = r.uniform(0, self.screen_width * -1)
             self.horizontal_direction = "right"
-
+        else:
+            x_cor = r.uniform(0, self.screen_width)
+            self.horizontal_direction = "left"
         if y_cor > 0:
             self.vertical_direction = "down"
         else:
