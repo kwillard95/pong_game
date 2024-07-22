@@ -1,6 +1,6 @@
 import turtle as t
 import random as r
-from constants import HEADING_VALUES, COLLISION_BUFFER
+from constants import HEADING_VALUES, COLLISION_BUFFER, STARTING_MOVE_SPEED
 
 
 class Ball(t.Turtle):
@@ -10,6 +10,7 @@ class Ball(t.Turtle):
         self.screen_width = screen_width
         self.vertical_direction = "down"
         self.horizontal_direction = "left"
+        self.move_speed = STARTING_MOVE_SPEED
         self.color("green")
         self.penup()
         self.shape("circle")
@@ -17,6 +18,7 @@ class Ball(t.Turtle):
     def serve_ball(self, l_paddle_serve):
         y_cor_choices = [self.screen_height + 50, (self.screen_height + 50) * -1]
         y_cor = y_cor_choices[r.randint(0, 1)]
+        self.move_speed = STARTING_MOVE_SPEED
         if l_paddle_serve:
             x_cor = r.uniform(0, self.screen_width * -1)
             self.horizontal_direction = "right"
@@ -31,6 +33,11 @@ class Ball(t.Turtle):
         self.setpos(x_cor, y_cor)
 
     def redirect_ball_direction(self):
+        updated_move_speed = self.move_speed * .75
+        if updated_move_speed < 0:
+            self.move_speed = 0
+        else:
+            self.move_speed = updated_move_speed
         if self.heading() == HEADING_VALUES["left"]:
             self.setheading(HEADING_VALUES["right"])
         elif self.heading() == HEADING_VALUES["right"]:

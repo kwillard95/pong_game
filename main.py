@@ -39,7 +39,7 @@ def set_up_game():
     r_paddle.move_paddle()
 
     def play_game():
-        time.sleep(.05)
+        time.sleep(ball.move_speed)
         if ball.is_ball_missing():
             l_paddle_win = ball.is_l_paddle_win()
             if l_paddle_win:
