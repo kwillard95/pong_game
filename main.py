@@ -30,29 +30,29 @@ def set_up_screen():
 
 def set_up_game():
     set_up_screen()
-    user_scoreboard = Scoreboard(screen_height, screen_width, True)
-    computer_scoreboard = Scoreboard(screen_height, screen_width, False)
-    user = Paddle(screen, screen_width, screen_height, False)
-    computer = Paddle(screen, screen_width, screen_height, True)
+    l_paddle_scoreboard = Scoreboard(screen_height, screen_width, True)
+    r_paddle_scoreboard = Scoreboard(screen_height, screen_width, False)
+    l_paddle = Paddle(screen, screen_width, screen_height, False)
+    r_paddle = Paddle(screen, screen_width, screen_height, True)
     ball = Ball(screen_width, screen_height)
-    user.move_user_paddle()
+    l_paddle.move_paddle()
+    r_paddle.move_paddle()
 
     def play_game():
         time.sleep(.05)
-        computer.move_computer_paddle()
         if ball.is_ball_missing():
             users_win = ball.is_users_win()
             if users_win:
-                user_scoreboard.score += 1
-                user_scoreboard.write_score()
+                l_paddle_scoreboard.score += 1
+                l_paddle_scoreboard.write_score()
                 ball.serve_ball(users_serve=True)
             else:
-                computer_scoreboard.score += 1
-                computer_scoreboard.write_score()
+                r_paddle_scoreboard.score += 1
+                r_paddle_scoreboard.write_score()
                 ball.serve_ball(users_serve=False)
         else:
             ball.detect_wall_collision()
-            if ball.detect_paddle_collision(user, computer):
+            if ball.detect_paddle_collision(l_paddle, r_paddle):
                 ball.redirect_ball_direction()
         ball.move_ball()
         screen.update()

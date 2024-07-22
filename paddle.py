@@ -1,18 +1,18 @@
 import turtle as t
-from constants import HEADING_VALUES, NUM_OF_STEPS, COMPUTER_PACE, WINDOW_PADDING
+from constants import HEADING_VALUES, NUM_OF_STEPS, WINDOW_PADDING
 
 
 class Paddle(t.Turtle):
-    def __init__(self, screen, screen_width, screen_height, is_computer):
+    def __init__(self, screen, screen_width, screen_height, is_l_paddle):
         super().__init__()
         self.screen = screen
         self.screen_width = screen_width
         self.screen_height = screen_height
-        if is_computer:
-            self.is_computer = True
+        if is_l_paddle:
+            self.is_l_paddle = True
             self.setx(screen_width - WINDOW_PADDING)
         else:
-            self.is_computer = False
+            self.is_l_paddle = False
             self.setx((screen_width - WINDOW_PADDING + 10) * -1)
 
         self.penup()
@@ -20,9 +20,9 @@ class Paddle(t.Turtle):
         self.setheading(HEADING_VALUES["up"])
         self.color("white")
         self.shape("square")
-        self.shapesize(1, 3)
+        self.shapesize(stretch_len=5, stretch_wid=1)
 
-    def redirect_user_paddle(self, direction):
+    def redirect_paddle(self, direction):
         def redirect_paddle():
             nonlocal direction
             opposite_direction = ''
@@ -37,25 +37,20 @@ class Paddle(t.Turtle):
         return redirect_paddle
 
     def is_at_edge(self):
-        if self.screen_height - abs(self.ycor()) <= 30:
+        if self.screen_height - abs(self.ycor()) <= 50:
             return True
         else:
             return False
 
-    def redirect_computer_paddle(self):
-        if self.heading() == HEADING_VALUES['up']:
-            self.setheading(HEADING_VALUES['down'])
-        elif self.heading() == HEADING_VALUES['down']:
-            self.setheading(HEADING_VALUES['up'])
-
-    def move_computer_paddle(self):
-        if self.is_at_edge():
-            self.redirect_computer_paddle()
-        self.forward(COMPUTER_PACE)
-
-    def move_user_paddle(self):
+    def move_paddle(self):
         self.screen.listen()
-        self.screen.onkeypress(self.redirect_user_paddle("down"), 'Down')
-        self.screen.onkeypress(self.redirect_user_paddle("up"), 'Up')
+        if self.is_l_paddle:
+            self.screen.onkeypress(self.redirect_paddle("down"), 'Down')
+            self.screen.onkeypress(self.redirect_paddle("up"), 'Up')
+        else:
+            self.screen.onkeypress(self.redirect_paddle("down"), 's')
+            self.screen.onkeypress(self.redirect_paddle("up"), 'w')
+
+
 
 

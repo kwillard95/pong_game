@@ -13,7 +13,6 @@ class Ball(t.Turtle):
         self.color("green")
         self.penup()
         self.shape("circle")
-        self.shapesize(.5, .5)
 
     def serve_ball(self, users_serve):
         y_cor_choices = [self.screen_height + 50, (self.screen_height + 50) * -1]
@@ -72,14 +71,15 @@ class Ball(t.Turtle):
                 self.vertical_direction = "up"
                 return False
 
-    def detect_paddle_collision(self, user, computer):
+    def detect_paddle_collision(self, l_paddle, r_paddle):
         # If the ball hits the paddle above (0,0), move ball up
         # If the ball hits the paddle below (0,0), move ball down
-        if abs(self.xcor() - user.xcor()) < COLLISION_BUFFER and abs(self.ycor() - user.ycor()) < COLLISION_BUFFER + 20:
+        if (abs(self.xcor() - l_paddle.xcor()) < COLLISION_BUFFER and abs(self.ycor() - l_paddle.ycor())
+                < COLLISION_BUFFER + 40):
             self.horizontal_direction = "right"
             return True
-        if (abs(self.xcor() - computer.xcor()) < COLLISION_BUFFER and
-                abs(self.ycor() - computer.ycor()) < COLLISION_BUFFER + 20):
+        if (abs(self.xcor() - r_paddle.xcor()) < COLLISION_BUFFER  and
+                abs(self.ycor() - r_paddle.ycor()) < COLLISION_BUFFER + 40):
             self.horizontal_direction = "left"
             return True
         else:
