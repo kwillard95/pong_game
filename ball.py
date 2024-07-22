@@ -14,10 +14,10 @@ class Ball(t.Turtle):
         self.penup()
         self.shape("circle")
 
-    def serve_ball(self, users_serve):
+    def serve_ball(self, l_paddle_serve):
         y_cor_choices = [self.screen_height + 50, (self.screen_height + 50) * -1]
         y_cor = y_cor_choices[r.randint(0, 1)]
-        if users_serve:
+        if l_paddle_serve:
             x_cor = r.uniform(0, self.screen_width * -1)
             self.horizontal_direction = "right"
         else:
@@ -57,7 +57,7 @@ class Ball(t.Turtle):
             return True
         return False
 
-    def is_users_win(self):
+    def is_l_paddle_win(self):
         return self.xcor() > 0
 
     def detect_wall_collision(self):

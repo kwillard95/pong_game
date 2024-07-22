@@ -41,15 +41,15 @@ def set_up_game():
     def play_game():
         time.sleep(.05)
         if ball.is_ball_missing():
-            users_win = ball.is_users_win()
-            if users_win:
+            l_paddle_win = ball.is_l_paddle_win()
+            if l_paddle_win:
                 l_paddle_scoreboard.score += 1
                 l_paddle_scoreboard.write_score()
-                ball.serve_ball(users_serve=True)
+                ball.serve_ball(l_paddle_serve=False)
             else:
                 r_paddle_scoreboard.score += 1
                 r_paddle_scoreboard.write_score()
-                ball.serve_ball(users_serve=False)
+                ball.serve_ball(l_paddle_serve=True)
         else:
             ball.detect_wall_collision()
             if ball.detect_paddle_collision(l_paddle, r_paddle):
